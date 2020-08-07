@@ -1,0 +1,33 @@
+class Solution {
+public:
+    static bool cmp(pair<pair<int,int>,int>& a,pair<pair<int,int>,int>& b){
+        return (a.first.first<b.first.first || (a.first.first==b.first.first && a.first.second>b.first.second) || (a.first.first==b.first.first && a.first.second==b.first.second && a.second<b.second));
+    }
+    vector<pair<pair<int,int>,int>> mp;
+    void help(TreeNode *node,int x,int y,vector<vector<int>>& ans){
+        if(!node) return ;
+        TreeNode* n=node;
+        mp.push_back({{x,y},n->val});
+        if(n->left) help(n->left,x-1,y-1,ans);
+        if(n->right) help(n->right,x+1,y-1,ans);
+        
+    }
+    vector<vector<int>> verticalTraversal(TreeNode* root) {
+        vector<vector<int>> ans;
+        if(!root) return ans;
+        help(root,0,0,ans);
+        sort(mp.begin(),mp.end(),cmp);
+        vector<int> temp={mp[0].second};
+        for(int i=1;i<mp.size();i++)
+        {
+            if(mp[i].first.first!=mp[i-1].first.first){
+                ans.push_back(temp);
+                temp.clear();
+            }
+            temp.push_back(mp[i].second);
+        }
+        ans.push_back(temp);
+                temp.clear();
+        return ans;
+    }
+};
