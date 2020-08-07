@@ -1,0 +1,107 @@
+Design HashSet
+
+Solution
+Design a HashSet without using any built-in hash table libraries.
+
+To be specific, your design should include these functions:
+
+add(value): Insert a value into the HashSet. 
+contains(value) : Return whether the value exists in the HashSet or not.
+remove(value): Remove a value in the HashSet. If the value does not exist in the HashSet, do nothing.
+
+Example:
+
+MyHashSet hashSet = new MyHashSet();
+hashSet.add(1);         
+hashSet.add(2);         
+hashSet.contains(1);    // returns true
+hashSet.contains(3);    // returns false (not found)
+hashSet.add(2);          
+hashSet.contains(2);    // returns true
+hashSet.remove(2);          
+hashSet.contains(2);    // returns false (already removed)
+
+Note:
+
+All values will be in the range of [0, 1000000].
+The number of operations will be in the range of [1, 10000].
+Please do not use the built-in HashSet library.
+C++	
+1
+class MyHashSet {
+2
+public:
+3
+    /** Initialize your data structure here. */
+4
+     vector<int> arr[124];
+5
+    MyHashSet() {
+6
+       
+7
+       
+8
+    }
+9
+    
+10
+    void add(int key) {
+11
+        if(contains(key)) return ;
+12
+        int hash= key%123;
+13
+        arr[hash].push_back(key);
+14
+    }
+15
+    
+16
+    void remove(int key) {
+17
+        if(!contains(key)) return ;
+18
+        int hash=key%123;
+19
+        for(int i=0;i<arr[hash].size();i++)
+20
+            if(arr[hash][i]==key) {arr[hash].erase(arr[hash].begin()+i);return;}
+21
+        
+22
+    }
+23
+    
+24
+    /** Returns true if this set contains the specified element */
+25
+    bool contains(int key) {
+26
+        int hash=key%123;
+27
+        for(int i: arr[hash])
+28
+            if(i==key) return true;
+29
+        return false;
+30
+    }
+31
+};
+32
+​
+33
+/**
+34
+ * Your MyHashSet object will be instantiated and called as such:
+35
+ * MyHashSet* obj = new MyHashSet();
+36
+ * obj->add(key);
+37
+ * obj->remove(key);
+38
+ * bool param_3 = obj->contains(key);
+39
+ */
