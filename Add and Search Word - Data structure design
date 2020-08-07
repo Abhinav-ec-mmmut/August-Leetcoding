@@ -1,0 +1,133 @@
+Add and Search Word - Data structure design
+
+Solution
+Design a data structure that supports the following two operations:
+
+void addWord(word)
+bool search(word)
+search(word) can search a literal word or a regular expression string containing only letters a-z or .. A . means it can represent any one letter.
+
+Example:
+
+addWord("bad")
+addWord("dad")
+addWord("mad")
+search("pad") -> false
+search("bad") -> true
+search(".ad") -> true
+search("b..") -> true
+Note:
+You may assume that all words are consist of lowercase letters a-z.
+
+   Show Hint #1  
+C++	
+1
+class WordDictionary {
+2
+public:
+3
+    /** Initialize your data structure here. */
+4
+    WordDictionary *children[26];
+5
+    bool endOfWord;
+6
+    
+7
+    WordDictionary() {
+8
+        for(int i=0;i<26;i++)
+9
+            children[i]=NULL;
+10
+            endOfWord=false;
+11
+    }
+12
+    
+13
+    /** Adds a word into the data structure. */
+14
+    void addWord(string word) {
+15
+        WordDictionary *t=this;
+16
+        for(int i=0;i<word.size();i++){
+17
+            char c=word[i]-'a';
+18
+            if(!t->children[c])
+19
+                t->children[c]=new WordDictionary();
+20
+            t=t->children[c];
+21
+        }
+22
+        t->endOfWord=true;
+23
+        return ;
+24
+    }
+25
+    
+26
+    /** Returns if the word is in the data structure. A word could contain the dot character '.' to represent any one letter. */
+27
+    bool search(string word) {
+28
+         return serch(word,this);
+29
+    }
+30
+    bool serch(string word,WordDictionary *t){
+31
+        for(int i=0;i<word.size();i++){
+32
+            if(word[i]!='.'){
+33
+                char c=word[i]-'a';
+34
+                if(!t->children[c])
+35
+                return false;
+36
+                t=t->children[c];
+37
+            }
+38
+            else{
+39
+                for(int j=0;j<26;j++){
+40
+                    string s=word.substr(i+1);
+41
+                    if(t->children[j] && serch(s,t->children[j])) return true;
+42
+                }
+43
+                return false;
+44
+            }
+45
+        }
+46
+         return (t->endOfWord);
+47
+    }
+48
+};
+49
+​
+50
+/**
+51
+ * Your WordDictionary object will be instantiated and called as such:
+52
+ * WordDictionary* obj = new WordDictionary();
+53
+ * obj->addWord(word);
+54
+ * bool param_2 = obj->search(word);
+55
+ */
